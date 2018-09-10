@@ -23,7 +23,6 @@ The key stay `Match` but there are 2 children keys: `Conditions` and `Parameters
 `Conditions` are all keys and parameters found on the same line as `Match` in a `sshd_config` file.
 `Parameters` are the keys and parameters found in a `Match` block.
 
-    
     sshd_config_filename_part: 10_sshd_config       # the name of the file containing the configuration
                                                         
 This variable points to the file containing the current configuration found in the `ssh_config` variable.
