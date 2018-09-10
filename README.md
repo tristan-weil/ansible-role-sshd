@@ -43,7 +43,7 @@ These variables allows to create them.
 
 ## Dependencies
 
-t18s.fr_firewall_config
+- t18s.fr_firewall_config
 
 ## Example Playbook
 
