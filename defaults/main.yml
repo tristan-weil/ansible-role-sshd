@@ -1,0 +1,9 @@
+---
+
+sshd_config: {}
+
+sshd_config_filename_part: 10_sshd_config
+sshd_config_filename_part_state: present
+
+sshd_firewall_config_ipv4_rules: none
+sshd_firewall_config_ipv6_rules: none

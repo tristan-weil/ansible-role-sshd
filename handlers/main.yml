@@ -1,0 +1,12 @@
+---
+
+- name: sshd reload
+  service:
+    name: sshd
+    state: reloaded
+
+- name: sshd restart
+  listen: network restart
+  service:
+    name: sshd
+    state: restarted

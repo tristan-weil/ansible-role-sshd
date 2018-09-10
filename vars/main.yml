@@ -1,0 +1,33 @@
+---
+
+sshd_default_config:
+  KexAlgorithms: curve25519-sha256@libssh.org
+  Ciphers: chacha20-poly1305@openssh.com
+  MACs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+  Protocol: 2
+  HostKey:
+    - /etc/ssh/ssh_host_ed25519_key
+
+  PermitRootLogin: 'no'
+  PasswordAuthentication: 'no'
+  ChallengeResponseAuthentication: 'no'
+  PubkeyAuthentication: 'yes'
+  AuthorizedKeysFile: .ssh/authorized_keys
+
+  AllowGroups: ssh-access
+
+  Port: 22
+  AddressFamily: any
+  ListenAddress: 0.0.0.0
+
+  LoginGraceTime: 2m
+  StrictModes: 'yes'
+  MaxAuthTries: 6
+  MaxSessions: 10
+  IgnoreRhosts: 'yes'
+
+  UsePam: 'yes'
+  UseDNS: 'no'
+
+  Subsystem: "{{ sshd_subsystem_sftp }}"

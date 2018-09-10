@@ -1,0 +1,54 @@
+{# ######################################## #}
+{# ##### MACROS ########################### #}
+{# ######################################## #}
+{% macro display_keylist(pkey, list) -%}
+{% for value in list|sort -%}
+{{ pkey }} {{ value }}
+{%- endfor %}
+{%- endmacro %}
+{# ######################################## #}
+{% macro display_keydict(pkey, dict) -%}
+{% for (key, value) in dict|dictsort -%}
+{{ pkey }} {{ key }}
+{{ display_dict(value, 4) }}
+{%- endfor %}
+{%- endmacro %}
+{# ######################################## #}
+{% macro display_match(pkey, dict) -%}
+{{ pkey }} {% for (key, value) in dict['Conditions']|dictsort %}{{ key }} {{ value }} {% endfor %}
+
+{{ display_dict(dict['Parameters'], 4) }}
+{%- endmacro %}
+{# ######################################## #}
+{% macro do_cond(key, value, offset=0) -%}
+{% if value is string %}
+{{ ' ' * offset }}{{ key }} {{ value }}
+{% elif value is mapping %}
+{{ display_keydict(key, value) }}
+{%- elif value is iterable %}
+{{ display_keylist(key, value) }}
+{% else %}
+{{ key }} {{ value }}
+{% endif %}
+{%- endmacro %}
+{# ######################################## #}
+{% macro display_dict(dict, offset=0) -%}
+{% for (key, value) in dict|dictsort -%}
+{%      if key != 'Match' -%}
+{{ do_cond(key, value, offset) }}
+{%-     endif %}
+{%- endfor %}
+{% for (key, value) in dict|dictsort -%}
+{%      if key == 'Match' -%}
+{{ display_match(key, value) }}
+{%-     endif %}
+{%- endfor %}
+{%- endmacro %}
+{# ######################################## #}
+{# ##### MAIN ############################# #}
+{# ######################################## #}
+{% if sshd_config_filename_part == '10_sshd_config' %}
+{{ display_dict(sshd_default_config | combine(sshd_config, recursive=True)) }}
+{% else %}
+{{ display_dict(sshd_config) }}
+{% endif %}
