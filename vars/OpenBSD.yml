@@ -1,4 +1,3 @@
 ---
 
 sshd_subsystem_sftp: sftp /usr/libexec/sftp-server
-
