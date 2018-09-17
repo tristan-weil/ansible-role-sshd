@@ -1,0 +1,8 @@
+---
+
+- import_role:
+    name: t18s.fr_firewall_config
+  vars:
+    firewall_config_name: 20sshd
+    firewall_config_ipv4_rules: "{{ sshd_firewall_config_ipv4_rules }}"
+    firewall_config_ipv6_rules: "{{ sshd_firewall_config_ipv6_rules }}"

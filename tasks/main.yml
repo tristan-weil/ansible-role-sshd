@@ -4,55 +4,12 @@
   include_vars: "{{ ansible_distribution }}.yml"
   tags: always
 
-- name: add group ssh-access
-  group:
-    name: ssh-access
+- import_tasks: user_mgmt.yml
 
-- name: create the directory for parts
-  file:
-    path: /etc/ssh/sshd_config_assemble
-    owner: root
-    group: root
-    mode: "0700"
-    state: directory
+- import_tasks: config.yml
 
-- name: install sshd configuration file part
-  template:
-    src: etc/ssh/sshd_config.j2
-    dest: "/etc/ssh/sshd_config_assemble/{{ sshd_config_filename_part }}"
-    owner: root
-    group: root
-    mode: "0600"
-  when: sshd_config_filename_part_state == 'present'
-
-- name: delete sshd configuration file part
-  file:
-    path: "/etc/ssh/sshd_config_assemble/{{ sshd_config_filename_part }}"
-    state: absent
-  when: sshd_config_filename_part_state != 'present'
-
-- name: assemble sshd configuration file parts
-  assemble:
-    src: /etc/ssh/sshd_config_assemble
-    dest: /etc/ssh/sshd_config
-    owner: root
-    group: root
-    mode: "0600"
-    validate: /usr/sbin/sshd -f %s -t
-  notify:
-    - sshd reload
-
-- name: add the sshd service to init and start the service
-  service:
-    name: sshd
-    enabled: True
-    state: started
+- import_tasks: service.yml
 
 - meta: flush_handlers
 
-- import_role:
-    name: t18s.fr_firewall_config
-  vars:
-    firewall_config_name: 20sshd
-    firewall_config_ipv4_rules: "{{ sshd_firewall_config_ipv4_rules }}"
-    firewall_config_ipv6_rules: "{{ sshd_firewall_config_ipv6_rules }}"
+- import_tasks: fw.yml

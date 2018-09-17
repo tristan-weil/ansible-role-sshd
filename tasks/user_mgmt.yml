@@ -1,0 +1,5 @@
+---
+
+- name: add group ssh-access
+  group:
+    name: ssh-access
