@@ -1,6 +1,6 @@
 ---
 
-- import_role:
+- include_role:
     name: t18s.fr_firewall_config
   vars:
     firewall_config_name: 420sshd
