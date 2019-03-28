@@ -14,11 +14,11 @@ Available variables are listed below, along with default values (see `defaults/m
                                                     # by default, its the content of the var 'sshd_default_config'
     
 The default configuration of the OpenSSH server is available in `sshd_default_config` in `vars/main.yml`.
-It is possible to override or add new options using the `sshd_config` dictionnary if the destination filename is not changed because both variables are merged.
-The variables in the dictionnary must respect the name and the grammar of the real `sshd_config` file.
+It is possible to override or add new options using the `sshd_config` dictionary if the destination filename is not changed because both variables are merged.
+The variables in the dictionary must respect the name and the grammar of the real `sshd_config` file.
 
 There is one special case: the `Match` key. 
-Because the grammar is not easily translated into `jinja2`, let's modify it in the dictionnary.
+Because the grammar is not easily translated into `jinja2`, let's modify it in the dictionary.
 The key stay `Match` but there are 2 children keys: `Conditions` and `Parameters`.
 `Conditions` are all keys and parameters found on the same line as `Match` in a `sshd_config` file.
 `Parameters` are the keys and parameters found in a `Match` block.
