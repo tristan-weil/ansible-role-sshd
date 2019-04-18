@@ -1,8 +1,5 @@
 ---
 
-- name: load os specific vars
-  include_vars: "{{ ansible_facts['distribution'] }}.yml"
-
 - import_tasks: user_mgmt.yml
 
 - import_tasks: config.yml
