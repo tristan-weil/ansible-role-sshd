@@ -1,5 +1,8 @@
 ---
 
+##############################################################################
+# Configuration
+##############################################################################
 sshd_default_config:
   KexAlgorithms: curve25519-sha256@libssh.org
   Ciphers: chacha20-poly1305@openssh.com
@@ -33,9 +36,14 @@ sshd_default_config:
 
   Subsystem: "{{ sshd_subsystem_sftp }}"
 
-
+##############################################################################
+# Variables
+##############################################################################
 sshd_subsystem_sftp: "{{ __sshd_subsystem_sftp_by_distribution[ ansible_facts['distribution'] ] }}.yml"
 
+##############################################################################
+# Distributions' dictionaries
+##############################################################################
 __sshd_subsystem_sftp_by_distribution:
   Debian: sftp /usr/lib/openssh/sftp-server
   OpenBSD: sftp /usr/libexec/sftp-server
