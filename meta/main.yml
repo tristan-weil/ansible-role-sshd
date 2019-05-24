@@ -1,3 +1,15 @@
 ---
 
 allow_duplicates: True
+
+dependencies: []
+
+galaxy_info:
+  author: Tristan Weil
+  description: Todo
+  license: BSD
+  min_ansible_version: 2.7
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
