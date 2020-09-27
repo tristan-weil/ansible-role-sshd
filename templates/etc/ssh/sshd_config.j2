@@ -4,7 +4,7 @@
 {% macro display_keylist(pkey, list) -%}
 {% for value in list|sort -%}
 {{ pkey }} {{ value }}
-{%- endfor %}
+{% endfor %}
 {%- endmacro %}
 {# ######################################## #}
 {% macro display_keydict(pkey, dict) -%}
@@ -14,10 +14,12 @@
 {%- endfor %}
 {%- endmacro %}
 {# ######################################## #}
-{% macro display_match(pkey, dict) -%}
-{{ pkey }} {% for (key, value) in dict['Conditions']|dictsort %}{{ key }} {{ value }} {% endfor %}
+{% macro display_match(pkey, list) -%}
+{% for value in list -%}
+{{ pkey }} {% for (mkey, mvalue) in value['Conditions']|dictsort %}{{ mkey }} {{ mvalue }} {% endfor %}
 
-{{ display_dict(dict['Parameters'], 4) }}
+{{ display_dict(value['Parameters'], 4) }}
+{%- endfor %}
 {%- endmacro %}
 {# ######################################## #}
 {% macro do_cond(key, value, offset=0) -%}
@@ -25,9 +27,8 @@
 {{ ' ' * offset }}{{ key }} {{ value }}
 {% elif value is mapping %}
 {{ display_keydict(key, value) }}
-{%- elif value is iterable %}
-{{ display_keylist(key, value) }}
-{% else %}
+{% elif value is iterable %}
+{{ display_keylist(key, value) }}{% else %}
 {{ key }} {{ value }}
 {% endif %}
 {%- endmacro %}
@@ -47,8 +48,4 @@
 {# ######################################## #}
 {# ##### MAIN ############################# #}
 {# ######################################## #}
-{% if sshd_config_filename_part == '10_sshd_config' %}
-{{ display_dict(sshd_default_config | combine(sshd_config, recursive=True)) }}
-{% else %}
-{{ display_dict(sshd_config) }}
-{% endif %}
+{{ display_dict(_sshd_default_config | combine(_sshd_default_config_by_os_family[ ansible_facts['os_family'] ], recursive=True) | combine(sshd_config, recursive=True)) }}

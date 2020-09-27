@@ -1,0 +1,37 @@
+---
+
+dependency:
+  name: 'galaxy'
+  options:
+    role-file: 'requirements_galaxy.yml'
+
+driver:
+  name: 'docker'
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+  flake8 .
+
+platforms:
+  - name: 'target-debian-${MOLECULE_INSTANCE_NAME_ID:-1}'
+    image: '${MOLECULE_LINUX_DISTRIBUTION:-geerlingguy/docker-debian10-ansible:latest}'
+    command: ''
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: True
+    pre_build_image: True
+
+provisioner:
+  name: 'ansible'
+  config_options:
+    defaults:
+      stdout_callback: 'yaml'
+      bin_ansible_callbacks: True
+  options:
+    D: True
+  log: True
+
+verifier:
+  name: 'ansible'

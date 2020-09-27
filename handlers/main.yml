@@ -1,12 +1,11 @@
 ---
 
-- name: sshd reload
+- name: 'sshd_reload_handler'
   service:
-    name: sshd
-    state: reloaded
+    name: "{{ _sshd_bin }}"
+    state: 'reloaded'
 
-- name: sshd restart
-  listen: network restart
+- name: 'sshd_restart_handler'
   service:
-    name: sshd
-    state: restarted
+    name: "{{ _sshd_bin }}"
+    state: 'restarted'

@@ -1,0 +1,5 @@
+---
+
+- src: 'https://github.com/tristan-weil/ansible-role-pkg.git'
+  version: 'master'
+  scm: 'git'

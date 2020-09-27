@@ -1,11 +1,47 @@
 ---
 
-- import_tasks: user_mgmt.yml
+- name: 'add group ssh-access'
+  group:
+    name: 'ssh-access'
+    system: True
 
-- import_tasks: config.yml
+- name: 'add users to the ssh-access group'
+  user:
+    name: "{{ item }}"
+    groups:
+      - ssh-access
+    append: True
+  loop: "{{ sshd_ssh_access_group_users }}"
 
-- import_tasks: service.yml
+- name: 'create privilege separation directory'
+  file:
+    path: '/run/sshd'
+    owner: 'root'
+    group: "{{ _sshd_root_group }}"
+    mode: '0755'
+    state: 'directory'
+  when: ansible_facts['os_family'] == "Debian"
 
-- import_tasks: fw.yml
+- import_role:
+    name: 'ansible-role-pkg'
+  vars:
+    pkg_list: "{{ _sshd_pkgs }}"
 
-- meta: flush_handlers
+- name: 'install sshd configuration'
+  template:
+    src: 'etc/ssh/sshd_config.j2'
+    dest: '/etc/ssh/sshd_config'
+    owner: 'root'
+    group: "{{ _sshd_root_group }}"
+    mode: '0600'
+    validate: '/usr/sbin/sshd -f %s -t'
+  notify:
+    - 'sshd_reload_handler'
+
+- name: 'add the sshd service to init and start the service'
+  service:
+    name: "{{ _sshd_bin }}"
+    enabled: True
+    state: 'started'
+
+- meta: 'flush_handlers'

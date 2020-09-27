@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  name: 'Verify'
+  become: True
+  gather_facts: True
+  vars:
+    __verify_svc_by_os_family:
+      Debian: 'ssh'
+      OpenBSD: 'sshd'
+
+  tasks:
+    - name: 'Check service is enabled/started'
+      service:
+        name: "{{ __verify_svc_by_os_family[ ansible_facts['os_family'] ] }}"
+        enabled: True
+        state: 'started'
+      register: __verify_svc
+      failed_when: __verify_svc.changed

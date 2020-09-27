@@ -5,11 +5,15 @@ allow_duplicates: True
 dependencies: []
 
 galaxy_info:
-  author: Tristan Weil
-  description: Todo
-  license: BSD
-  min_ansible_version: 2.7
+  author: 'Tristan Weil'
+  description: 'An Ansible Role to configure an OpenSSH server'
+  license: 'BSD'
+  min_ansible_version: '2.9'
   platforms:
-    - name: Debian
+    - name: 'Debian'
       versions:
-        - stretch
+        - 'buster'
+
+    - name: 'OpenBSD'
+      versions:
+        - '6.7'

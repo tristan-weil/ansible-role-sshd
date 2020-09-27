@@ -1,0 +1,21 @@
+---
+
+- hosts: all
+  name: 'Prepare'
+  become: True
+  gather_facts: False
+
+  tasks:
+    - name: 'Install python for Ansible'
+      raw: |
+        if [ $(uname) = "Linux" ]; then
+          if [ -f /etc/debian_version ]; then
+            apt-get -y update && apt-get -y \
+              -o "APT::Install-Recommends=false" \
+              -o "APT::Install-Suggests=false" \
+              install python3-minimal curl gpg gpg-agent
+          fi
+        elif [ $(uname) = "OpenBSD" ]; then
+          pkg_add -I python%3.7 curl
+        fi
+      changed_when: False

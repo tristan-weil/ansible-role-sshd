@@ -3,47 +3,68 @@
 ##############################################################################
 # Configuration
 ##############################################################################
-sshd_default_config:
-  KexAlgorithms: curve25519-sha256@libssh.org
-  Ciphers: chacha20-poly1305@openssh.com
-  MACs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+_sshd_default_config:
+  KexAlgorithms: 'curve25519-sha256@libssh.org'
+  Ciphers: 'chacha20-poly1305@openssh.com'
+  MACs: 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com'
 
   Protocol: 2
   HostKey:
-    - /etc/ssh/ssh_host_ed25519_key
+    - '/etc/ssh/ssh_host_ed25519_key'
 
   PermitRootLogin: 'no'
   PasswordAuthentication: 'no'
   ChallengeResponseAuthentication: 'no'
   PubkeyAuthentication: 'yes'
-  AuthorizedKeysFile: .ssh/authorized_keys
+  AuthorizedKeysFile: '.ssh/authorized_keys'
   AllowAgentForwarding: 'no'
 
-  AllowGroups: ssh-access
+  AllowGroups: 'ssh-access'
 
   Port: 22
-  AddressFamily: any
-  ListenAddress: 0.0.0.0
+  AddressFamily: 'any'
+  ListenAddress: '0.0.0.0'
 
-  LoginGraceTime: 2m
+  LoginGraceTime: '2m'
   StrictModes: 'yes'
   MaxAuthTries: 6
   MaxSessions: 10
   IgnoreRhosts: 'yes'
 
-  UsePam: 'yes'
   UseDNS: 'no'
 
-  Subsystem: "{{ sshd_subsystem_sftp }}"
+  Subsystem: "{{ _sshd_subsystem_sftp }}"
+
+_sshd_default_config_by_os_family:
+  Debian:
+    UsePam: 'yes'
+
+  OpenBSD: {}
 
 ##############################################################################
 # Variables
 ##############################################################################
-sshd_subsystem_sftp: "{{ __sshd_subsystem_sftp_by_distribution[ ansible_facts['distribution'] ] }}"
+_sshd_subsystem_sftp: "{{ _sshd_subsystem_sftp_by_os_family[ ansible_facts['os_family'] ] }}"
+_sshd_pkgs: "{{ _sshd_pkgs_by_os_family[ ansible_facts['os_family'] ] }}"
+_sshd_bin: "{{ _sshd_bin_by_os_family[ ansible_facts['os_family'] ] }}"
+_sshd_root_group: "{{ _sshd_root_group_by_os_family[ ansible_facts['os_family'] ] }}"
 
 ##############################################################################
 # Distributions' dictionaries
 ##############################################################################
-__sshd_subsystem_sftp_by_distribution:
-  Debian: sftp /usr/lib/openssh/sftp-server
-  OpenBSD: sftp /usr/libexec/sftp-server
+_sshd_subsystem_sftp_by_os_family:
+  Debian: 'sftp /usr/lib/openssh/sftp-server'
+  OpenBSD: 'sftp /usr/libexec/sftp-server'
+
+_sshd_pkgs_by_os_family:
+  Debian:
+    - 'openssh-server'
+  OpenBSD: []
+
+_sshd_bin_by_os_family:
+  Debian: 'ssh'
+  OpenBSD: 'sshd'
+
+_sshd_root_group_by_os_family:
+  Debian: 'root'
+  OpenBSD: 'wheel'
