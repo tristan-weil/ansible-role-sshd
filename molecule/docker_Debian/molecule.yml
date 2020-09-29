@@ -29,6 +29,7 @@ provisioner:
     defaults:
       stdout_callback: 'yaml'
       bin_ansible_callbacks: True
+      interpreter_python: 'python3'
   options:
     D: True
   log: True
