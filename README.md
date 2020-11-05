@@ -61,4 +61,4 @@ See [meta/main.yml](https://github.com/tristan-weil/ansible-role-sshd/blob/maste
 
 ## License
 
-See [LICENSE.md](https://github.com/tristan-weil/ansible-role-sshd/blob/master/LICENSE.md)
+See [LICENSE.md](LICENSE.md)
